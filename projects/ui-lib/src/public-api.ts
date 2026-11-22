@@ -2,7 +2,6 @@
  * Public API Surface of ui-lib
  */
 
-export * from './lib/ui-lib';
 export * from './lib/button/button';
 export * from './lib/card/card';
 export * from './lib/select/select';

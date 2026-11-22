@@ -29,3 +29,4 @@ export interface Location extends ApiRecord {
 }
 
 export type Resource = 'character' | 'episode' | 'location';
+export type ResourceRecord = Character | Episode | Location;

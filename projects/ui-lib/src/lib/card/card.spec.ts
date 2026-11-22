@@ -10,13 +10,12 @@ describe('Card', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Card],
-providers: [provideZonelessChangeDetection()],
-    })
-    .compileComponents();
+      providers: [provideZonelessChangeDetection()],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Card);
     component = fixture.componentInstance;
-fixture.componentRef.setInput('title', 'Detalle');
+    fixture.componentRef.setInput('title', 'Detalle');
     fixture.detectChanges();
   });
 

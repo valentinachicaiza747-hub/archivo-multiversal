@@ -4,6 +4,8 @@ import { Button } from '../button/button';
 export interface TableColumn<T extends object> {
   key: Extract<keyof T, string>;
   header: string;
+  /** Clases visuales del distintivo para cada fila. */
+  badgeClasses?: (row: T) => string;
 }
 
 export interface TableAction<T extends object> {

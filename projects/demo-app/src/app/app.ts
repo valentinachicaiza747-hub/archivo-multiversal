@@ -1,20 +1,35 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Button, Card, Select, Table, type TableAction, type TableColumn } from 'ui-lib';
-import { ExplorerService, type ExplorerRow } from './explorer.service';
+import { ExplorerService } from './explorer.service';
+import { toExplorerRow, type ExplorerTableRow } from './explorer.presentation';
 import type { Resource } from './explorer.models';
 
-const columnsByResource: Record<Resource, TableColumn<ExplorerRow>[]> = {
+const columnsByResource: Record<Resource, TableColumn<ExplorerTableRow>[]> = {
   character: [
     { key: 'name', header: 'Nombre' },
     { key: 'summary', header: 'Especie' },
+    {
+      key: 'status',
+      header: 'Estado',
+      badgeClasses: (row) => {
+        if (row.status === 'Vivo') return 'bg-emerald-100 text-emerald-900';
+        if (row.status === 'Muerto') return 'bg-rose-100 text-rose-900';
+        return 'bg-slate-200 text-slate-800';
+      },
+    },
+    { key: 'origin', header: 'Origen' },
   ],
   episode: [
     { key: 'name', header: 'Episodio' },
+    { key: 'code', header: 'Código' },
     { key: 'summary', header: 'Fecha de emisión' },
+    { key: 'characterCount', header: 'Personajes' },
   ],
   location: [
     { key: 'name', header: 'Ubicación' },
+    { key: 'locationType', header: 'Tipo' },
     { key: 'summary', header: 'Dimensión' },
+    { key: 'residentCount', header: 'Residentes' },
   ],
 };
 
@@ -29,8 +44,10 @@ export class App {
   protected readonly explorer = inject(ExplorerService);
   protected readonly columns = computed(() => columnsByResource[this.explorer.resource()]);
 
-  protected readonly lastTableAction = signal<TableAction<ExplorerRow> | null>(null);
-    protected readonly detailFields = computed(() => {
+  protected readonly rows = computed(() => this.explorer.records().map(toExplorerRow));
+
+  protected readonly lastTableAction = signal<TableAction<ExplorerTableRow> | null>(null);
+  protected readonly detailFields = computed(() => {
     const record = this.lastTableAction()?.row.record;
     if (!record) return [];
 
@@ -69,16 +86,21 @@ export class App {
         if (Array.isArray(value)) {
           return {
             name,
-            label: name === 'episode' ? 'Episodios' : labels[name] ?? name,
+            label: name === 'episode' ? 'Episodios' : (labels[name] ?? name),
             text: String(value.length),
           };
         }
 
-        if (value && typeof value === 'object' && 'name' in value && typeof value.name === 'string') {
+        if (
+          value &&
+          typeof value === 'object' &&
+          'name' in value &&
+          typeof value.name === 'string'
+        ) {
           return { name, label: labels[name] ?? name, text: value.name };
         }
 
-                const text = String(value ?? '—');
+        const text = String(value ?? '—');
         const translate = name === 'status' || name === 'species' || name === 'gender';
 
         return {
@@ -89,7 +111,7 @@ export class App {
       });
   });
 
-    protected readonly episodeLinks = computed(() => {
+  protected readonly episodeLinks = computed(() => {
     const record = this.lastTableAction()?.row.record;
     if (!record || !('species' in record)) return [];
 
@@ -98,7 +120,7 @@ export class App {
       number: url.split('/').pop(),
     }));
   });
-protected readonly rawDetail = computed(() =>
+  protected readonly rawDetail = computed(() =>
     JSON.stringify(this.lastTableAction()?.row.record ?? {}, null, 2),
   );
   protected readonly resourceOptions = [
@@ -133,7 +155,7 @@ protected readonly rawDetail = computed(() =>
     }
   }
 
-  protected openDetail(action: TableAction<ExplorerRow>, dialog: HTMLDialogElement): void {
+  protected openDetail(action: TableAction<ExplorerTableRow>, dialog: HTMLDialogElement): void {
     this.lastTableAction.set(action);
     dialog.showModal();
   }

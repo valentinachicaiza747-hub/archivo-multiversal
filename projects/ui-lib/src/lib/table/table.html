@@ -33,7 +33,18 @@
         @for (row of rows(); track row) {
           <tr>
             @for (column of columns(); track column.key) {
-              <td class="px-4 py-3">{{ row[column.key] }}</td>
+              <td class="px-4 py-3">
+                @if (column.badgeClasses; as badgeClasses) {
+                  <span
+                    class="inline-block whitespace-nowrap rounded-full px-2 py-1 text-xs font-semibold"
+                    [class]="badgeClasses(row)"
+                  >
+                    {{ row[column.key] }}
+                  </span>
+                } @else {
+                  {{ row[column.key] }}
+                }
+              </td>
             }
             <td class="px-4 py-3">
               <div class="flex flex-wrap gap-2">
@@ -54,7 +65,10 @@
         } @empty {
           <tr>
             <td [attr.colspan]="columns().length + 1" class="px-4 py-8 text-center text-slate-600">
-              {{ emptyMessage() }}
+              <div class="flex flex-col items-center gap-3 text-center">
+                <span class="empty-portal" aria-hidden="true"></span>
+                <p role="status">{{ emptyMessage() }}</p>
+              </div>
             </td>
           </tr>
         }

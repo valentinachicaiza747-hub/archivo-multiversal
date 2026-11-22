@@ -10,13 +10,12 @@ describe('Select', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Select],
-providers: [provideZonelessChangeDetection()],
-    })
-    .compileComponents();
+      providers: [provideZonelessChangeDetection()],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Select);
     component = fixture.componentInstance;
-fixture.componentRef.setInput('label', 'Recurso');
+    fixture.componentRef.setInput('label', 'Recurso');
     fixture.detectChanges();
   });
 

@@ -1,0 +1,15 @@
+.empty-portal {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  border: 2px solid #6ee7b7;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    #080b23 22%,
+    #087553 42%,
+    #6ee7b7 48%,
+    #312e81 57%,
+    #080b23 75%
+  );
+}

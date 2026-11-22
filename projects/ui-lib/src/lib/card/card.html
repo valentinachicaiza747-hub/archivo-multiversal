@@ -1,22 +1,19 @@
-<section
-  class="rounded-xl bg-white text-slate-900"
-  [class]="elevationClasses[elevation()]"
->
-<header class="border-b border-slate-200">
-  <h2>
-    <button
-      type="button"
-      class="block w-full p-4 text-left hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700"
-      (click)="headerClicked.emit()"
-    >
-      <span class="block text-xl font-semibold">{{ title() }}</span>
+<section class="rounded-xl bg-white text-slate-900" [class]="elevationClasses[elevation()]">
+  <header class="border-b border-slate-200">
+    <h2>
+      <button
+        type="button"
+        class="block w-full p-4 text-left hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700"
+        (click)="headerClicked.emit()"
+      >
+        <span class="block text-xl font-semibold">{{ title() }}</span>
 
-      @if (subtitle(); as text) {
-        <span class="mt-1 block text-sm text-slate-600">{{ text }}</span>
-      }
-    </button>
-  </h2>
-</header>
+        @if (subtitle(); as text) {
+          <span class="mt-1 block text-sm text-slate-600">{{ text }}</span>
+        }
+      </button>
+    </h2>
+  </header>
 
   <div class="p-4">
     <ng-content></ng-content>

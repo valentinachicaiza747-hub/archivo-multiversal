@@ -3,5 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 body {
+  @apply font-archive;
   background: #020617 url('/Fondo-Espacial.jpg') center / cover no-repeat fixed;
 }
