@@ -1,0 +1,89 @@
+<main class="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
+<header class="flex flex-col items-center gap-4 rounded-2xl bg-slate-950 px-5 py-6 text-white sm:flex-row sm:justify-between sm:px-8">
+  <div class="text-center sm:text-left">
+    <h1 class="text-3xl font-bold sm:text-4xl">Archivo Multiversal</h1>
+    <p class="mt-2 text-emerald-100">
+      Explora personajes, episodios y ubicaciones de Rick and Morty.
+    </p>
+  </div>
+
+  <img
+    src="rick-morty.png"
+    alt="Rick y Morty frente a un portal"
+   class="h-28 w-28 shrink-0 object-contain sm:h-36 sm:w-36"
+  >
+</header>
+
+  <div class="grid gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2">
+    <ui-select
+      label="Recurso"
+      [options]="resourceOptions"
+      [value]="explorer.resource()"
+      [allowClear]="false"
+      (selectionChange)="changeResource($event.value)"
+    ></ui-select>
+
+    <div>
+      <ui-select
+        label="Estado"
+        placeholder="Todos"
+        [options]="statusOptions"
+        [value]="explorer.status()"
+        [disabled]="explorer.resource() !== 'character'"
+        (valueChange)="changeStatus($event)"
+      ></ui-select>
+
+      @if (explorer.resource() !== 'character') {
+        <p class="mt-2 text-sm text-slate-600">
+          El filtro de estado solo se aplica a personajes.
+        </p>
+      }
+    </div>
+  </div>
+
+  <section aria-labelledby="results-title" class="space-y-3 rounded-xl bg-white p-4">
+    <h2 id="results-title" class="text-xl font-semibold text-slate-900">Resultados</h2>
+    <ui-table
+      [columns]="columns()"
+      [rows]="explorer.rows()"
+      [loading]="explorer.loading()"
+      [errorMessage]="explorer.errorMessage()"
+      emptyMessage="No encontramos registros para esta búsqueda."
+      (actionTriggered)="openDetail($event, detailDialog)"
+    ></ui-table>
+  </section>
+</main>
+
+<dialog
+  #detailDialog
+  aria-label="Detalle o confirmación"
+  class="m-auto w-[90%] max-w-lg rounded-xl backdrop:bg-black/50"
+>
+  @if (lastTableAction(); as result) {
+    @if (result.action === 'view') {
+      <ui-card [title]="result.row.name" elevation="outlined">
+        <dl class="mb-4 max-h-[55vh] space-y-2 overflow-y-auto">
+          @for (field of detailFields(); track field.name) {
+            <div class="border-b border-slate-200 pb-2">
+              <dt class="font-semibold text-emerald-700">{{ field.name }}</dt>
+              <dd class="whitespace-pre-wrap break-words text-sm">{{ field.text }}</dd>
+            </div>
+          }
+        </dl>
+        <ui-button label="Cerrar" (clicked)="detailDialog.close()"></ui-button>
+      </ui-card>
+    } @else {
+      <ui-card title="¿Quitar este registro?" elevation="outlined">
+        <p class="mb-4">{{ result.row.name }} se quitará de la tabla actual.</p>
+        <div class="flex gap-2">
+          <ui-button label="Cancelar" variant="secondary" (clicked)="detailDialog.close()"></ui-button>
+          <ui-button
+            label="Eliminar"
+            variant="danger"
+            (clicked)="explorer.removeRow(result.row); detailDialog.close()"
+          ></ui-button>
+        </div>
+      </ui-card>
+    }
+  }
+</dialog>

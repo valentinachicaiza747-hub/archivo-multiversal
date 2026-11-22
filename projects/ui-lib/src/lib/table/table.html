@@ -1,0 +1,64 @@
+<div class="overflow-x-auto rounded-lg border border-slate-300">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-slate-950 text-white">
+      <tr>
+        @for (column of columns(); track column.key) {
+          <th scope="col" class="px-4 py-3">{{ column.header }}</th>
+        }
+        <th scope="col" class="px-4 py-3">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y divide-slate-200">
+      @if (loading()) {
+        @for (placeholder of skeletonRows; track placeholder) {
+          <tr aria-hidden="true" class="motion-safe:animate-pulse">
+            @for (column of columns(); track column.key) {
+              <td class="px-4 py-3">
+                <div class="h-4 w-24 rounded bg-slate-200"></div>
+              </td>
+            }
+            <td class="px-4 py-3">
+              <div class="h-4 w-32 rounded bg-slate-200"></div>
+            </td>
+          </tr>
+        }
+      } @else if (errorMessage(); as message) {
+        <tr>
+          <td [attr.colspan]="columns().length + 1" class="bg-red-50 px-4 py-6 text-red-800">
+            <p role="alert">{{ message }}</p>
+          </td>
+        </tr>
+      } @else {
+        @for (row of rows(); track row) {
+          <tr>
+            @for (column of columns(); track column.key) {
+              <td class="px-4 py-3">{{ row[column.key] }}</td>
+            }
+            <td class="px-4 py-3">
+              <div class="flex flex-wrap gap-2">
+                <ui-button
+                  label="Ver detalle"
+                  size="sm"
+                  (clicked)="actionTriggered.emit({ action: 'view', row: row })"
+                ></ui-button>
+                <ui-button
+                  label="Eliminar"
+                  variant="danger"
+                  size="sm"
+                  (clicked)="actionTriggered.emit({ action: 'delete', row: row })"
+                ></ui-button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="columns().length + 1" class="px-4 py-8 text-center text-slate-600">
+              {{ emptyMessage() }}
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>
