@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 
 import { Table } from './table';
 
+type TestRow = { name: string };
+
 describe('Table', () => {
-  let component: Table;
-  let fixture: ComponentFixture<Table>;
-
-  beforeEach(async () => {
+  it('muestra el encabezado y el nombre de la fila', async () => {
     await TestBed.configureTestingModule({
-      imports: [Table]
-    })
-    .compileComponents();
+      imports: [Table],
+      providers: [provideZonelessChangeDetection()],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(Table);
-    component = fixture.componentInstance;
+    const fixture = TestBed.createComponent(Table<TestRow>);
+    fixture.componentRef.setInput('columns', [{ key: 'name', header: 'Nombre' }]);
+    fixture.componentRef.setInput('rows', [{ name: 'Rick Sanchez' }]);
     fixture.detectChanges();
-  });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    const host = fixture.nativeElement as HTMLElement;
+    expect(host.querySelector('th')?.textContent).toContain('Nombre');
+    expect(host.querySelector('td')?.textContent).toContain('Rick Sanchez');
   });
 });
