@@ -36,12 +36,13 @@ El workspace usa Angular 20, TypeScript en modo estricto y Tailwind CSS 3. Conti
 | Ruta | Responsabilidad |
 | --- | --- |
 | `projects/demo-app/src/app` | Pantalla principal, filtros, columnas de la tabla y diálogos. |
-| `projects/demo-app/src/app/explorer.service.ts` | Consulta HTTP, transformación de registros en filas y estado de la consulta. |
+| `projects/demo-app/src/app/explorer.service.ts` | Consulta la API y guarda los registros originales mediante señales. |
+| `projects/demo-app/src/app/explorer.presentation.ts` | Traduce los valores de la tabla y prepara las filas para cada recurso. |
 | `projects/demo-app/src/app/explorer.models.ts` | Tipos de personajes, episodios y ubicaciones. |
 | `projects/ui-lib/src/lib` | Componentes reutilizables de botón, tarjeta, selector y tabla. |
 | `projects/ui-lib/src/public-api.ts` | Exportaciones que la aplicación consume con `import … from 'ui-lib'`. |
 
-Al seleccionar un recurso o cambiar el filtro, la aplicación llama a `ExplorerService`. El servicio consulta la API con `HttpClient` y publica las filas, el estado de carga y los errores mediante señales. La tabla recibe esos datos por entradas y emite la fila seleccionada cuando el usuario abre un detalle o solicita eliminarla.
+Al seleccionar un recurso o cambiar el filtro, la aplicación llama a ExplorerService. El servicio consulta la API con HttpClient y publica los registros originales, el estado de carga y los errores mediante señales. La aplicación transforma los registros en filas para la tabla. La tabla emite la fila seleccionada al abrir su detalle o solicitar su eliminación.
 
 ## API de componentes
 

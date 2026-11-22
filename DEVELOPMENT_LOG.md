@@ -31,7 +31,10 @@ y comprobé el resultado en el navegador.
 | «aqui no deverian salir todos los episodios donde sale el personaje?» | Agregué una lista desplegable con enlaces a los episodios. | La primera propuesta de ChatGPT mostraba solo el total de episodios. Lo reemplacé por una lista que permite abrir cada episodio. |
 | «lo que aparece en detalle lo podemos cambiar al idioma español?» | Traduje las etiquetas y valores comunes como el estado, la especie y el género. | Conservé los nombres propios de personajes y ubicaciones. |
 | «este tambien lo podemos pasar al español?» | Traduje los nombres de las especies en la tabla de personajes. | Apliqué la traducción al texto de la tabla y conservé el valor original en el registro. |
-
+| «1. Quitar `UiLib` y poner paleta y fuente propias en `tailwind.config.js`.» | Retiré el componente que Angular generó como ejemplo y configuré una paleta azul noche y verde portal, con Trebuchet MS como fuente principal. | Eliminé la exportación y la prueba del componente de ejemplo. Conservé la biblioteca y sus cuatro componentes reutilizables. |
+| «2. Agregar más columnas por recurso, incluido el status con un badge de color.» | Añadí columnas según el recurso y un distintivo con texto y color para el estado. | La demo decide qué colores corresponden a cada estado. La tabla solo recibe las clases de la columna para mantenerse reutilizable. |
+| «3. Hacer un empty state ilustrado.» | Añadí un portal junto al mensaje de resultados vacíos. | Probé la ilustración con una lista vacía temporal y luego restauré las filas que vienen de la API. |
+| «4. Mover traducciones y formateo fuera del servicio.» | Dejé los registros originales en `ExplorerService` y moví la preparación de las filas a `explorer.presentation.ts`. | La plantilla todavía llamaba a `removeRow` después del cambio. La corregí para llamar a `removeRecord` con el registro original y comprobé que la fila desaparece al confirmar. |
 
 ## Verificación
 
