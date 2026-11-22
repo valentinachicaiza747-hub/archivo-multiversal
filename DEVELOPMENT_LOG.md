@@ -25,11 +25,13 @@ Usé ChatGPT como guía paso a paso. Me ayudó a entender comandos, escribir
 fragmentos de Angular y revisar errores. Apliqué los cambios en mi computadora
 y comprobé el resultado en el navegador.
 
-| Prompt que usé | Qué acepté y por qué | Qué cambié o descarté |
+| Prompt textual | Qué acepté y por qué | Qué cambié o descarté |
 | --- | --- | --- |
-| Seguí la guía para crear el workspace y probar cada componente por separado. | Construí el proyecto en mi equipo partiendo de un workspace nuevo. |
-| Usé `input.required<string>()` para que la app indique el texto de cada botón. | Quité «Ver detalle» como texto predeterminado del componente. |
-| Usé el mismo tono oscuro en el encabezado y en los títulos de la tabla. | Elegí el fondo espacial y mi sticker para el encabezado. Probé varios tamaños y conservé el que me gustó más. |
+| «podemos hacer que cuando abra el ver detalle se mire asi?» | Agregué un retrato circular para que el personaje se reconozca al abrir la ficha. | Conservé los campos del registro debajo de la imagen para mostrar la información completa. |
+| «aqui no deverian salir todos los episodios donde sale el personaje?» | Agregué una lista desplegable con enlaces a los episodios. | La primera propuesta de ChatGPT mostraba solo el total de episodios. Lo reemplacé por una lista que permite abrir cada episodio. |
+| «lo que aparece en detalle lo podemos cambiar al idioma español?» | Traduje las etiquetas y valores comunes como el estado, la especie y el género. | Conservé los nombres propios de personajes y ubicaciones. |
+| «este tambien lo podemos pasar al español?» | Traduje los nombres de las especies en la tabla de personajes. | Apliqué la traducción al texto de la tabla y conservé el valor original en el registro. |
+
 
 ## Verificación
 
@@ -43,8 +45,3 @@ Cancelar conserva la fila y Eliminar la quita de la tabla actual.
 - Simplifiqué la presentación del origen y la ubicación para mostrar sus nombres.
 - Agregué una lista desplegable con enlaces a los episodios del personaje.
 - Traduje las etiquetas de la ficha y los nombres de las especies en la tabla.
-
-### Uso de IA
-
-Usé ChatGPT para orientar estos cambios en la plantilla y el servicio de Angular.
-Algunas preguntas que hice fueron «Cómo puedo mostrar en la ficha de cada personaje una lista desplegable con enlaces a todos los episodios en los que aparece?» y «Cómo puedo traducir al español las etiquetas de la ficha y valores como el estado, la especie y el género, conservando los nombres propios?».
