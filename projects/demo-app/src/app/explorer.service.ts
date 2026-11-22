@@ -67,7 +67,20 @@ private toRow(record: ResourceRecord): ExplorerRow {
     let summary: string;
 
     if ('species' in record) {
-      summary = record.species;
+      const speciesInSpanish: Record<string, string> = {
+  Human: 'Humano',
+  Alien: 'Extraterrestre',
+  Humanoid: 'Humanoide',
+  Animal: 'Animal',
+  Disease: 'Enfermedad',
+  Mythological: 'Mitológico',
+  Robot: 'Robot',
+  Cronenberg: 'Cronenberg',
+  Poopybutthole: 'Poopybutthole',
+  unknown: 'Desconocida',
+};
+
+summary = speciesInSpanish[record.species] ?? record.species;
     } else if ('air_date' in record) {
       summary = record.air_date;
     } else {
