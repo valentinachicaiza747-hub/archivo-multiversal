@@ -61,17 +61,57 @@
 >
   @if (lastTableAction(); as result) {
     @if (result.action === 'view') {
-      <ui-card [title]="result.row.name" elevation="outlined">
-        <dl class="mb-4 max-h-[55vh] space-y-2 overflow-y-auto">
-          @for (field of detailFields(); track field.name) {
-            <div class="border-b border-slate-200 pb-2">
-              <dt class="font-semibold text-emerald-700">{{ field.name }}</dt>
-              <dd class="whitespace-pre-wrap break-words text-sm">{{ field.text }}</dd>
-            </div>
-          }
-        </dl>
-        <ui-button label="Cerrar" (clicked)="detailDialog.close()"></ui-button>
-      </ui-card>
+      <ui-card title="Detalle del registro" elevation="outlined">
+  <div class="mb-4 max-h-[60vh] overflow-y-auto rounded-xl bg-emerald-100 p-4 sm:p-6">
+    @for (field of detailFields(); track field.name) {
+      @if (field.name === 'image' && field.text) {
+        <img
+          [src]="field.text"
+          [alt]="'Retrato de ' + result.row.name"
+          class="mx-auto mb-4 aspect-square w-full max-w-[240px] rounded-full object-cover"
+        >
+      }
+    }
+
+    <h3 class="mb-4 text-center text-2xl font-bold text-slate-900">
+      {{ result.row.name }}
+    </h3>
+
+    <dl class="space-y-2 rounded-lg bg-white p-4">
+      @for (field of detailFields(); track field.name) {
+        @if (field.name !== 'image' && field.name !== 'name') {
+          <div class="border-b border-emerald-100 pb-2">
+            <dt class="font-semibold text-emerald-900">{{ field.label }}</dt>
+            <dd class="whitespace-pre-wrap break-words text-sm">
+             @if (field.name === 'episode' && episodeLinks().length > 0) {
+  <details>
+    <summary class="cursor-pointer text-emerald-800">
+      Ver los {{ episodeLinks().length }} episodios
+    </summary>
+
+    <ul class="mt-2 space-y-1">
+      @for (episode of episodeLinks(); track episode.url) {
+        <li>
+          <a [href]="episode.url" target="_blank" rel="noopener noreferrer"
+             class="text-emerald-800 underline">
+            Episodio {{ episode.number }}
+          </a>
+        </li>
+      }
+    </ul>
+  </details>
+} @else {
+  {{ field.text || '—' }}
+}
+            </dd>
+          </div>
+        }
+      }
+    </dl>
+  </div>
+
+  <ui-button label="Cerrar" (clicked)="detailDialog.close()"></ui-button>
+</ui-card>
     } @else {
       <ui-card title="¿Quitar este registro?" elevation="outlined">
         <p class="mb-4">{{ result.row.name }} se quitará de la tabla actual.</p>

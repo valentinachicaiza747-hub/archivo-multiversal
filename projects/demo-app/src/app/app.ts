@@ -30,19 +30,77 @@ export class App {
   protected readonly columns = computed(() => columnsByResource[this.explorer.resource()]);
 
   protected readonly lastTableAction = signal<TableAction<ExplorerRow> | null>(null);
-  protected readonly detailFields = computed(() => {
+    protected readonly detailFields = computed(() => {
     const record = this.lastTableAction()?.row.record;
     if (!record) return [];
 
+    const labels: Record<string, string> = {
+      id: 'ID',
+      status: 'Estado',
+      species: 'Especie',
+      type: 'Tipo',
+      gender: 'Género',
+      origin: 'Origen',
+      location: 'Ubicación',
+      episode: 'Episodio',
+      air_date: 'Fecha de emisión',
+      characters: 'Personajes',
+      dimension: 'Dimensión',
+      residents: 'Residentes',
+    };
+    const translations: Record<string, string> = {
+      Alive: 'Vivo',
+      Dead: 'Muerto',
+      unknown: 'Desconocido',
+      Unknown: 'Desconocido',
+      Human: 'Humano',
+      Alien: 'Extraterrestre',
+      Humanoid: 'Humanoide',
+      Robot: 'Robot',
+      Male: 'Masculino',
+      Female: 'Femenino',
+      Genderless: 'Sin género',
+    };
     const entries: [string, unknown][] = Object.entries(record);
 
-    return entries.map(([name, value]) => ({
-      name,
-      text: typeof value === 'object'
-        ? JSON.stringify(value, null, 2)
-        : String(value ?? '—'),
+    return entries
+      .filter(([name]) => name !== 'url' && name !== 'created')
+      .map(([name, value]) => {
+        if (Array.isArray(value)) {
+          return {
+            name,
+            label: name === 'episode' ? 'Episodios' : labels[name] ?? name,
+            text: String(value.length),
+          };
+        }
+
+        if (value && typeof value === 'object' && 'name' in value && typeof value.name === 'string') {
+          return { name, label: labels[name] ?? name, text: value.name };
+        }
+
+                const text = String(value ?? '—');
+        const translate = name === 'status' || name === 'species' || name === 'gender';
+
+        return {
+          name,
+          label: labels[name] ?? name,
+          text: translate ? (translations[text] ?? text) : text,
+        };
+      });
+  });
+
+    protected readonly episodeLinks = computed(() => {
+    const record = this.lastTableAction()?.row.record;
+    if (!record || !('species' in record)) return [];
+
+    return record.episode.map((url) => ({
+      url,
+      number: url.split('/').pop(),
     }));
   });
+protected readonly rawDetail = computed(() =>
+    JSON.stringify(this.lastTableAction()?.row.record ?? {}, null, 2),
+  );
   protected readonly resourceOptions = [
     { label: 'Personajes', value: 'character' },
     { label: 'Episodios', value: 'episode' },
@@ -75,9 +133,8 @@ export class App {
     }
   }
 
-    protected openDetail(action: TableAction<ExplorerRow>, dialog: HTMLDialogElement): void {
+  protected openDetail(action: TableAction<ExplorerRow>, dialog: HTMLDialogElement): void {
     this.lastTableAction.set(action);
     dialog.showModal();
   }
 }
- 
